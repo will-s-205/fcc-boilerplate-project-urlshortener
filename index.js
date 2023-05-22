@@ -3,28 +3,22 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const dns = require('dns');
+// Set up mongoose
+const mongoose = require('mongoose');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
-
-// Set up mongoose
-const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URI); // DON'T FORGET URI FROM MONGO DB 
+mongoose.connect(process.env.MONGO_URI); // DON'T FORGET URI FROM MONGO DB TO ENV VAR
 
 // Create a Model
-const personSchema = new mongoose.Schema({
+const shortenerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
-  },
-  age: {
-    type: Number
-  },
-  favoriteFoods:
-    [String]
+  }
 });
 
-const Person = mongoose.model('Person', personSchema);
+const Short = mongoose.model('Short', shortenerSchema);
 
 
 
