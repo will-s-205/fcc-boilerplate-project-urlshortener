@@ -7,6 +7,27 @@ const dns = require('dns');
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
+// Set up mongoose
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI); // DON'T FORGET URI FROM MONGO DB 
+
+// Create a Model
+const personSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: Number
+  },
+  favoriteFoods:
+    [String]
+});
+
+const Person = mongoose.model('Person', personSchema);
+
+
+
 app.use(cors());
 
 app.use('/public', express.static(`${process.cwd()}/public`));
