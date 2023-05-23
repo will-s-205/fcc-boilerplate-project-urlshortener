@@ -15,6 +15,18 @@ mongoose.connect(process.env.MONGO_URI); // DON'T FORGET URI FROM MONGO DB TO EN
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors());
+app.use('/public', express.static(`${process.cwd()}/public`));
+
+app.get('/', function (req, res) {
+  res.sendFile(process.cwd() + '/views/index.html');
+});
+
+// Your first API endpoint
+app.get('/api/hello', function (req, res) {
+  res.json({ greeting: 'hello API' });
+});
+
 // Create a Model
 const shortenerSchema = new mongoose.Schema({
   original_url: {
@@ -29,39 +41,11 @@ const shortenerSchema = new mongoose.Schema({
 
 const Url_data = mongoose.model('Url_data', shortenerSchema);
 
-// Create and Save a Record of a Model
-// var createAndSaveUrlData = () => {
-//   var url_item = new Url_data(
-//     {
-//       original_url: "https://www.google.com",
-//       short_url: 1
-//     });
-
-//   url_item.save(function (err, data) {
-//     if (err) return console.error(err);
-//   });
-// };
-// createAndSaveUrlData();
-
-app.use(cors());
-app.use('/public', express.static(`${process.cwd()}/public`));
-
-app.get('/', function (req, res) {
-  res.sendFile(process.cwd() + '/views/index.html');
-});
-
-// Your first API endpoint
-app.get('/api/hello', function (req, res) {
-  res.json({ greeting: 'hello API' });
-});
-
 // API endpoint triggering each time user hits POST URL button
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
-  const urlRegex = "/(https?):\/\/([A-Za-z0-9]\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/";
-
-  if (!url.match(urlRegex)) {
+  if (!url.match(/(https?):\/\/([A-Za-z0-9]\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
     res.json({
       error: "invalid url"
     });
