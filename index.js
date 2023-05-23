@@ -55,14 +55,22 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+// API endpoint triggering each time user hits POST URL button
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
-  // respond with a JSON string in a browser
-  res.json({
-    original_url: url,
-    short_url: 1 // REPLACE IT
-  });
+  const urlRegex = "/(https?):\/\/([A-Za-z0-9]\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/";
+
+  if (!url.match(urlRegex)) {
+    res.json({
+      error: "invalid url"
+    });
+  } else {
+    res.json({
+      original_url: url,
+      short_url: 1 // REPLACE IT
+    });
+  }
 
   // Create a Record of a Model
   var url_item = new Url_data(
@@ -80,22 +88,22 @@ app.post('/api/shorturl/', (req, res) => {
 
   // Find document if exist
   const findOneUrl = (url, done) => {
-    Url_data.findOne({ original_url: url }, function(err, byUrl) {
-        if (err) {return console.log(err)}
-        if (url=={original_url: url}) {return console.log("EXIST!")}
-        done(null, byUrl);
-      });
-    };
+    Url_data.findOne({ original_url: url }, function (err, byUrl) {
+      if (err) { return console.log(err) }
+      if (url == { original_url: url }) { return console.log("EXIST!") }
+      done(null, byUrl);
+    });
+  };
 
-      // if(findOneUrl==null){
-      //   res.json({
-      //     DB_check: "NOT FOUND!"
-      //   });
-      // } else {
-      //   res.json({
-      //     DB_check: "FOUND!"
-      //   });
-      // }
+  // if(findOneUrl==null){
+  //   res.json({
+  //     DB_check: "NOT FOUND!"
+  //   });
+  // } else {
+  //   res.json({
+  //     DB_check: "FOUND!"
+  //   });
+  // }
 
 
   // Delete Many Documents many documents from DB
@@ -110,7 +118,6 @@ app.post('/api/shorturl/', (req, res) => {
   // saveUrlData();
   // findOneUrl();
   // removeManyUrl();
-
 
 });
 
