@@ -12,13 +12,33 @@ mongoose.connect(process.env.MONGO_URI); // DON'T FORGET URI FROM MONGO DB TO EN
 
 // Create a Model
 const shortenerSchema = new mongoose.Schema({
-  name: {
+  original_url: {
     type: String,
+    required: true
+  },
+  short_url: {
+    type: Number,
     required: true
   }
 });
 
-const Short = mongoose.model('Short', shortenerSchema);
+const Url_data = mongoose.model('Url_data', shortenerSchema);
+
+// 3 Create and Save a Record of a Model // WORKING!
+ var createAndSaveUrlData = () => {
+  var url_item = new Url_data(
+    {
+      original_url: "https://www.google.com",
+      short_url: 1
+    });
+
+    url_item.save(function(err, data) {
+    if (err) return console.error(err);
+    // done(null, data);
+  });
+};
+
+createAndSaveUrlData();
 
 
 
@@ -95,4 +115,3 @@ app.listen(port, function() {
 //     echo: word
 //   });
 // });
-
