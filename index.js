@@ -62,6 +62,14 @@ app.post('/api/shorturl/', (req, res) => {
   })
 });
 
+// findOne in DB
+// app.find('/api/shorturl/:short_url', (req, res) => {
+//   Url.findOne({ short_url: req.params.short_url }, (err, data) => {
+//     if (err) res.json({ error: 'Invalid url' })
+//     console.log(data)
+//   })
+// })
+
 // add in the end { error: 'invalid url' }
   // if (url!=="^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$"){ return false; }
   // ^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$
