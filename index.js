@@ -45,7 +45,7 @@ app.use(cors());
 app.use('/public', express.static(`${process.cwd()}/public`));
 
 app.get('/', function(req, res) {
-  res.sendFile('/views/index.html');
+  res.sendFile(process.cwd() + '/views/index.html');
 });
 
 // Your first API endpoint
@@ -53,25 +53,13 @@ app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.post('/api/shorturl/', (req, res) => {
-  // const url = req.query.url;
-  // const url = req.params.url;
+const postUrl = app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
   res.json({
     original_url: url,
     short_url: 1 // REPLACE IT
   })
 });
-
-// // use query http://localhost:3000/api/shorturl?url=www.google.com // ECHO
-// const getUrl = app.get('/api/shorturl/:url', (req, res) => {
-//   const url = req.params.url;
-//   res.json({
-//     echo: url
-//   });
-// });
-
-
 
 // add in the end { error: 'invalid url' }
   // if it not starts from "https://www." and ends on ".com"?
