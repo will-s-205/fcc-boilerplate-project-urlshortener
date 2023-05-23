@@ -50,7 +50,7 @@ app.post('/api/shorturl/', (req, res) => {
       original_url: url,
       short_url: 1 // REPLACE IT
     });
-  } else (!url.match(/(https?):\/\/(\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
+  } else {
     res.json({
       error: "invalid url"
     });
