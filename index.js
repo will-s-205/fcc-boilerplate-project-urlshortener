@@ -39,14 +39,13 @@ const Url_data = mongoose.model('Url_data', shortenerSchema);
 
 createAndSaveUrlData();
 
-
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
 app.use('/public', express.static(`${process.cwd()}/public`));
 
 app.get('/', function(req, res) {
-  res.sendFile(process.cwd() + '/views/index.html');
+  res.sendFile('/views/index.html');
 });
 
 // Your first API endpoint
@@ -57,8 +56,9 @@ app.get('/api/hello', function(req, res) {
 app.post('/api/shorturl/', (req, res) => {
   // const url = req.query.url;
   // const url = req.params.url;
+  const url = req.body.url;
   res.json({
-    original_url: "www.google.com", // REPLACE IT by url
+    original_url: url,
     short_url: 1 // REPLACE IT
   })
 });
