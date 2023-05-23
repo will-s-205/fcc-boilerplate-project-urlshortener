@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const dns = require('dns');
+const validUrl = require('valid-url');
 
 // Set up mongoose
 const mongoose = require('mongoose');
@@ -45,16 +46,29 @@ const Url_data = mongoose.model('Url_data', shortenerSchema);
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
   
-  if (!url.match(/(https?):\/\/{0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
-    res.json({
-      error: "invalid url"
-    });
-  } else {
+  // if (!url.match(/(https?):\/\/{0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
+  //   res.json({
+  //     error: "invalid url"
+  //   });
+  // } else {
+  //   res.json({
+  //     original_url: url,
+  //     short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
+  //   });
+  // };
+
+  if (validUrl.isUri(url)){
+    console.log('Looks like an URI');
     res.json({
       original_url: url,
       short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
     });
-  };
+} else {
+    console.log('Not a URI');
+    res.json({
+      error: "invalid url"
+    });
+}
 
   // Create a Record of a Model
   var url_item = new Url_data(
