@@ -63,6 +63,9 @@ app.post('/api/shorturl/', (req, res) => {
 
 // add in the end { error: 'invalid url' }
   // if it not starts from "https://www." and ends on ".com"?
+  // ^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$
+  // ^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$
+  // if (url!=="^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$"){ return false; }
 
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
