@@ -24,7 +24,7 @@ const shortenerSchema = new mongoose.Schema({
 
 const Url_data = mongoose.model('Url_data', shortenerSchema);
 
-// 3 Create and Save a Record of a Model // WORKING!
+// Create and Save a Record of a Model
  var createAndSaveUrlData = () => {
   var url_item = new Url_data(
     {
@@ -34,7 +34,6 @@ const Url_data = mongoose.model('Url_data', shortenerSchema);
 
     url_item.save(function(err, data) {
     if (err) return console.error(err);
-    // done(null, data);
   });
 };
 
@@ -55,32 +54,22 @@ app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.post('/api/shorturl', (req, res) => {
-  const url = req.query.url;
+app.post('/api/shorturl/', (req, res) => {
+  // const url = req.query.url;
+  // const url = req.params.url;
   res.json({
-    original_url: url,
-    short_url: 1
-  });
+    original_url: "www.google.com", // REPLACE IT by url
+    short_url: 1 // REPLACE IT
+  })
 });
 
-// use query http://localhost:3000/api/shorturl?url=www.google.com // ECHO
-
-app.get('/?:url', (req, res) => {
-  const url = req.params.url;
-  res.json({
-    echo: url
-  });
-});
-
-
-// ECHO to get a number of url shortener
-// app.get('/:word/echo', (req, res) => {
-//   const word = req.params.word;
+// // use query http://localhost:3000/api/shorturl?url=www.google.com // ECHO
+// const getUrl = app.get('/api/shorturl/:url', (req, res) => {
+//   const url = req.params.url;
 //   res.json({
-//     echo: word
+//     echo: url
 //   });
 // });
-
 
 
 
@@ -99,19 +88,3 @@ app.listen(port, function() {
 // req.url - use it to get "/api/shorturl"
 // req.path - use it to get "/api/shorturl"
 // req.headers - use it to get all kind of information
-
-// returning requested url e.g www.google.com // WORKING only if index.html have method GET instead of POST
-// app.get('/api/shorturl', (req, res) => {
-//   const original_url = req.query.url;
-//   res.json({
-//     name: original_url
-//   });
-// });
-
-// ECHO to get a number of url shortener
-// app.get('/:word/echo', (req, res) => {
-//   const word = req.params.word;
-//   res.json({
-//     echo: word
-//   });
-// });
