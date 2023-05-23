@@ -58,6 +58,7 @@ app.get('/api/hello', function (req, res) {
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
+  // respond with a JSON string in a browser
   res.json({
     original_url: url,
     short_url: 1 // REPLACE IT
@@ -71,21 +72,46 @@ app.post('/api/shorturl/', (req, res) => {
     });
 
   // Save a Record of a Model
-  url_item.save(function (err, data) {
-    if (err) return console.error(err);
-  });
+  const saveUrlData = () => {
+    url_item.save(function (err, data) {
+      if (err) return console.error(err);
+    });
+  };
+
+  // Find document if exist
+  const findOneUrl = (url, done) => {
+    Url_data.findOne({ original_url: url }, function(err, byUrl) {
+        if (err) {return console.log(err)}
+        if (url=={original_url: url}) {return console.log("EXIST!")}
+        done(null, byUrl);
+      });
+    };
+
+      // if(findOneUrl==null){
+      //   res.json({
+      //     DB_check: "NOT FOUND!"
+      //   });
+      // } else {
+      //   res.json({
+      //     DB_check: "FOUND!"
+      //   });
+      // }
+
 
   // Delete Many Documents many documents from DB
-  const removeManyUrl = (done) => {
-    const urlToRmove = url;
-    Url_data.remove({
-      original_url:
-        url
-    }, function (err, removedDoc) {
-      if (err) return console.log(err);
-    })
+  const removeManyUrl = () => {
+    Url_data.remove({ original_url: url },
+      function (err, doc) {
+        if (err) return console.log(err);
+      })
   };
+
+  // Available operations on DB. Triggering each time user hits POST URL button
+  // saveUrlData();
+  // findOneUrl();
   // removeManyUrl();
+
+
 });
 
 // findOne in DB
