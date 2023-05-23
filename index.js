@@ -45,7 +45,7 @@ const Url_data = mongoose.model('Url_data', shortenerSchema);
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
-  if (!url.match(/(https?):\/\/([A-Za-z0-9]\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
+  if (!url.match(/(https?):\/\/(\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
     res.json({
       error: "invalid url"
     });
