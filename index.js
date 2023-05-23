@@ -57,22 +57,25 @@ app.get('/api/hello', function (req, res) {
 
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
-  
+
   res.json({
     original_url: url,
     short_url: 1 // REPLACE IT
   });
 
+  // Create a Record of a Model
   var url_item = new Url_data(
     {
       original_url: url,
       short_url: 1
     });
 
+  // Save a Record of a Model
   url_item.save(function (err, data) {
     if (err) return console.error(err);
   });
 
+  // Delete Many Documents many documents from DB
   const removeManyUrl = (done) => {
     const urlToRmove = url;
     Url_data.remove({
@@ -82,7 +85,7 @@ app.post('/api/shorturl/', (req, res) => {
       if (err) return console.log(err);
     })
   };
-  removeManyUrl();
+  // removeManyUrl();
 });
 
 // findOne in DB
