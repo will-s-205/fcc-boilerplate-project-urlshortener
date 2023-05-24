@@ -60,7 +60,7 @@ app.post('/api/shorturl/', (req, res) => {
     })
   }
 
-  // Delete Many Documents many documents from DB
+  // Delete Many Documents many documents from DB if requered
   const removeManyUrl = () => {
     Url_data.remove({ original_url: url },
       function (err, doc) {
@@ -105,28 +105,22 @@ app.post('/api/shorturl/', (req, res) => {
 
 });
 
-app.get('/api/shorturl/:short_url', (req, res) => {
+// Redirect to the original url by using short_url to find a record in DB and calling endpoint
+app.get('/api/shorturl/:short_url', async (req, res) => {
   const short_url = req.params.short_url;
+  try {
+    const findUrl = await Url_data.findOne({ short_url: short_url });
+    if (!findUrl) {
+      throw Error(`No short URL found for the given input`);
+    } else {
+      res.redirect(findUrl.original_url);
+      console.log("Rederecting to: " + findUrl.original_url);
+    }
+  }
+  catch (error) {
+    res.json({ error: 'invalid short url' })
+  }
 
-  res.json({
-    short_url: short_url
-  });
-
-  // Find document if exist
-  const findUrl = () => {
-    Url_data.find({short_url: short_url }).then((data) => {
-      console.log(short_url);
-
-      if (data != 0) {
-        console.log("GET: URL is exist: ");
-
-      } else {
-        console.log("GET: No records found");
-      }
-
-    })
-  };
-  findUrl();
 });
 
 app.listen(port, function () {
