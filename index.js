@@ -41,34 +41,25 @@ const shortenerSchema = new mongoose.Schema({
 });
 
 const Url_data = mongoose.model('Url_data', shortenerSchema);
+const TIMEOUT = 10000;
 
 // API endpoint triggering each time user hits POST URL button
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
-  
-  // if (!url.match(/(https?):\/\/{0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/)) {
-  //   res.json({
-  //     error: "invalid url"
-  //   });
-  // } else {
-  //   res.json({
-  //     original_url: url,
-  //     short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
-  //   });
-  // };
 
-  if (validUrl.isWebUri(url)){
+  // URL validatio
+  if (validUrl.isWebUri(url)) {
     console.log('Looks like an URI');
     res.json({
       original_url: url,
       short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
     });
-} else {
+  } else {
     console.log('Not a URI');
     res.json({
       error: "invalid url"
     });
-}
+  }
 
   // Create a Record of a Model
   var url_item = new Url_data(
@@ -84,25 +75,26 @@ app.post('/api/shorturl/', (req, res) => {
     });
   };
 
-  // Find document if exist
-  const findOneUrl = (url, done) => {
-    Url_data.findOne({ original_url: url }, function (err, byUrl) {
-      if (err) { return console.log(err) }
-      if (url == { original_url: url }) { return console.log("EXIST!") }
-      done(null, byUrl);
-    });
-  };
 
-  // if(findOneUrl==null){
-  //   res.json({
-  //     DB_check: "NOT FOUND!"
-  //   });
-  // } else {
-  //   res.json({
-  //     DB_check: "FOUND!"
-  //   });
-  // }
+  // const findOneUrl = (url, done) => {
 
+  //   let t = setTimeout(() => {
+  //     next({ message: "timeout" });
+  //   }, TIMEOUT);
+
+  //   Url_data.findOne(url, function (err, byUrl) {
+  //     clearTimeout(t);
+  //     if (err) { return console.log(err) }
+  //     if (url == null) { return console.log("EXIST!") }
+  //     done(null, byUrl);
+  //   });
+  // };
+
+    // Find document if exist
+  const findManyUrl = () => {
+  Url_data.find({original_url: url}).then((data) => {
+    console.log(data);
+   })}
 
   // Delete Many Documents many documents from DB
   const removeManyUrl = () => {
@@ -114,7 +106,7 @@ app.post('/api/shorturl/', (req, res) => {
 
   // Available operations on DB. Triggering each time user hits POST URL button
   // saveUrlData();
-  // findOneUrl();
+  findManyUrl();
   // removeManyUrl();
 
 });
