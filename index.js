@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const app = express();
+  const app = express();
 const dns = require('dns');
 const validUrl = require('valid-url');
 
@@ -47,14 +47,6 @@ const TIMEOUT = 10000;
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
-  // Delete Many Documents many documents from DB
-  const removeManyUrl = () => {
-    Url_data.remove({ original_url: url },
-      function (err, doc) {
-        if (err) return console.log(err);
-      })
-  };
-
   // Create a Record of a Model
   var url_item = new Url_data(
     {
@@ -68,14 +60,21 @@ app.post('/api/shorturl/', (req, res) => {
     })
   }
 
+  // Delete Many Documents many documents from DB
+  const removeManyUrl = () => {
+    Url_data.remove({ original_url: url },
+      function (err, doc) {
+        if (err) return console.log(err);
+      })
+  };
+
   // Find document if exist
-  const findManyUrl = () => {
+  const findUrl = () => {
     Url_data.find({ original_url: url }).then((data) => {
 
       if (data != 0) {
         console.log("URL already exist: " + url);
-        // redirect to the link
-        Url_data.find({ original_url: url }).then((data) => {
+        Url_data.find({ original_url: url }).then(() => {
           console.log("URL number is: " + url_item.short_url);
         })
 
@@ -89,7 +88,7 @@ app.post('/api/shorturl/', (req, res) => {
   // URL validation
   if (validUrl.isWebUri(url)) {
     console.log('Looks like an URI');
-    findManyUrl();
+    findUrl();
     res.json({
       original_url: url,
       short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
@@ -114,6 +113,38 @@ app.post('/api/shorturl/', (req, res) => {
 
 });
 
+app.get('/api/shorturl/:short_url', (req, res) => {
+  const short_url = req.params.short_url;
+  // var url_item = new Url_data(
+  //   {
+  //     original_url: url,
+  //     short_url: 1
+  //   });
+
+  res.json({
+    short_url: short_url
+  });
+
+  // Find document if exist
+  const findUrl = () => {
+    Url_data.find({ short_url: short_url }).then((data) => {
+      console.log(data);
+
+      if (data != 0) {
+        console.log("GET: URL is exist: ");
+
+      } else {
+        console.log("GET: No records found");
+      }
+
+    })
+  };
+  findUrl();
+
+
+
+});
+
 // findOne in DB
 // app.find('/api/shorturl/:short_url', (req, res) => {
 //   Url.findOne({ short_url: req.params.short_url }, (err, data) => {
@@ -122,21 +153,6 @@ app.post('/api/shorturl/', (req, res) => {
 //   })
 // })
 
-// add in the end { error: 'invalid url' }
-// if (url!=="^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$"){ return false; }
-// ^(((?!-))(xn--|_)?[a-z0-9-]{0,61}[a-z0-9]{1,1}\.)*(xn--)?([a-z0-9][a-z0-9\-]{0,60}|[a-z0-9-]{1,30}\.[a-z]{2,})$
-// ^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$
-// /(https?):\/\/([A-Za-z0-9]\w{1,63}\.){0,126}([A-Za-z0-9]\w{1,63}){1}\.[A-Za-z0-9]{2,18}/
-
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
 });
-
-
-// original_url
-// short_url
-// {"original_url":"https://www.google.com","short_url":1}
-
-// req.url - use it to get "/api/shorturl"
-// req.path - use it to get "/api/shorturl"
-// req.headers - use it to get all kind of information
