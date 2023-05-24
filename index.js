@@ -47,9 +47,43 @@ const TIMEOUT = 10000;
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
-  // URL validatio
+  // Delete Many Documents many documents from DB
+  const removeManyUrl = () => {
+    Url_data.remove({ original_url: url },
+      function (err, doc) {
+        if (err) return console.log(err);
+      })
+  };
+
+  // Create a Record of a Model
+  var url_item = new Url_data(
+    {
+      original_url: url,
+      short_url: 1
+    });
+
+  const saveUrlData = () => {
+    url_item.save(url).then(() => {
+      console.log("Saving URL to DB: "+url);
+    })}
+
+  // Find document if exist
+  const findManyUrl = () => {
+    Url_data.find({ original_url: url }).then((data) => {
+      if (data != 0) {
+        console.log(data);
+        // redirect to the link
+      } else {
+        console.log("No records found so far");
+        saveUrlData();
+      }
+    })
+  };
+
+  // URL validation
   if (validUrl.isWebUri(url)) {
     console.log('Looks like an URI');
+    findManyUrl();
     res.json({
       original_url: url,
       short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
@@ -61,38 +95,15 @@ app.post('/api/shorturl/', (req, res) => {
     });
   }
 
-  // Create a Record of a Model
-  var url_item = new Url_data(
-    {
-      original_url: url,
-      short_url: 1
-    });
 
-  // Save a Record of a Model
-  const saveUrlData = () => {
-    url_item.save(function (err, data) {
-      if (err) return console.error(err);
-    });
-  };
 
-  // Find document if exist
-  const findManyUrl = () => {
-    Url_data.find({ original_url: url }).then((data) => {
-      console.log(data);
-    })
-  }
 
-  // Delete Many Documents many documents from DB
-  const removeManyUrl = () => {
-    Url_data.remove({ original_url: url },
-      function (err, doc) {
-        if (err) return console.log(err);
-      })
-  };
+
+
 
   // Available operations on DB. Triggering each time user hits POST URL button
   // saveUrlData();
-  findManyUrl();
+  // findManyUrl();
   // removeManyUrl();
 
 });
