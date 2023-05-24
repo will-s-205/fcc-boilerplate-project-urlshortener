@@ -75,26 +75,12 @@ app.post('/api/shorturl/', (req, res) => {
     });
   };
 
-
-  // const findOneUrl = (url, done) => {
-
-  //   let t = setTimeout(() => {
-  //     next({ message: "timeout" });
-  //   }, TIMEOUT);
-
-  //   Url_data.findOne(url, function (err, byUrl) {
-  //     clearTimeout(t);
-  //     if (err) { return console.log(err) }
-  //     if (url == null) { return console.log("EXIST!") }
-  //     done(null, byUrl);
-  //   });
-  // };
-
-    // Find document if exist
+  // Find document if exist
   const findManyUrl = () => {
-  Url_data.find({original_url: url}).then((data) => {
-    console.log(data);
-   })}
+    Url_data.find({ original_url: url }).then((data) => {
+      console.log(data);
+    })
+  }
 
   // Delete Many Documents many documents from DB
   const removeManyUrl = () => {
