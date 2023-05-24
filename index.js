@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-  const app = express();
+const app = express();
 const dns = require('dns');
 const validUrl = require('valid-url');
 
@@ -100,26 +100,13 @@ app.post('/api/shorturl/', (req, res) => {
     });
   }
 
-
-
-
-
-
-
   // Available operations on DB. Triggering each time user hits POST URL button
-  // saveUrlData();
-  // findManyUrl();
   // removeManyUrl();
 
 });
 
 app.get('/api/shorturl/:short_url', (req, res) => {
   const short_url = req.params.short_url;
-  // var url_item = new Url_data(
-  //   {
-  //     original_url: url,
-  //     short_url: 1
-  //   });
 
   res.json({
     short_url: short_url
@@ -127,8 +114,8 @@ app.get('/api/shorturl/:short_url', (req, res) => {
 
   // Find document if exist
   const findUrl = () => {
-    Url_data.find({ short_url: short_url }).then((data) => {
-      console.log(data);
+    Url_data.find({short_url: short_url }).then((data) => {
+      console.log(short_url);
 
       if (data != 0) {
         console.log("GET: URL is exist: ");
@@ -140,18 +127,7 @@ app.get('/api/shorturl/:short_url', (req, res) => {
     })
   };
   findUrl();
-
-
-
 });
-
-// findOne in DB
-// app.find('/api/shorturl/:short_url', (req, res) => {
-//   Url.findOne({ short_url: req.params.short_url }, (err, data) => {
-//     if (err) res.json({ error: 'Invalid url' })
-//     console.log(data)
-//   })
-// })
 
 app.listen(port, function () {
   console.log(`Listening on port ${port}`);
