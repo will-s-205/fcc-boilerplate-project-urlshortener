@@ -41,26 +41,29 @@ const shortenerSchema = new mongoose.Schema({
 });
 
 const Url_data = mongoose.model('Url_data', shortenerSchema);
-const TIMEOUT = 10000;
 
 // API endpoint triggering each time user hits POST URL button
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
+  // Count records in collection +unary operator to make this var as a Number
+  const count = +Url_data.estimatedDocumentCount("url_datas");
+
   // Create a Record of a Model
-  var url_item = new Url_data(
+  const url_item = new Url_data(
     {
       original_url: url,
-      short_url: 1
+      // First short_url is 0 and then increments by 1
+      short_url: count ? count + 1 : 1
     });
 
   const saveUrlData = () => {
-    url_item.save(url).then(() => {
+    url_item.save().then(() => {
       console.log("Saving URL to DB: " + url);
     })
   }
 
-  // Delete Many Documents many documents from DB if requered
+  // Delete Many Documents many documents from DB if required
   const removeManyUrl = () => {
     Url_data.remove({ original_url: url },
       function (err, doc) {
@@ -68,7 +71,8 @@ app.post('/api/shorturl/', (req, res) => {
       })
   };
 
-  // Find document if exist
+  // Find document if exist 
+  // if NOT then save the data
   const findUrl = () => {
     Url_data.find({ original_url: url }).then((data) => {
 
@@ -100,12 +104,9 @@ app.post('/api/shorturl/', (req, res) => {
     });
   }
 
-  // Available operations on DB. Triggering each time user hits POST URL button
-  // removeManyUrl();
-
 });
 
-// Redirect to the original url by using short_url to find a record in DB and calling endpoint
+// Find and redirect to the original url by using short_url to find a record in DB and calling endpoint
 app.get('/api/shorturl/:short_url', async (req, res) => {
   const short_url = req.params.short_url;
   try {
