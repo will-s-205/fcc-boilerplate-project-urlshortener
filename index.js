@@ -64,15 +64,21 @@ app.post('/api/shorturl/', (req, res) => {
 
   const saveUrlData = () => {
     url_item.save(url).then(() => {
-      console.log("Saving URL to DB: "+url);
-    })}
+      console.log("Saving URL to DB: " + url);
+    })
+  }
 
   // Find document if exist
   const findManyUrl = () => {
     Url_data.find({ original_url: url }).then((data) => {
+
       if (data != 0) {
-        console.log(data);
+        console.log("URL already exist: " + url);
         // redirect to the link
+        Url_data.find({ original_url: url }).then((data) => {
+          console.log("URL number is: " + url_item.short_url);
+        })
+
       } else {
         console.log("No records found so far");
         saveUrlData();
