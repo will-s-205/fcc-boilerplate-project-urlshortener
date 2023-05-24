@@ -57,7 +57,7 @@ app.post('/api/shorturl/', (req, res) => {
   //   });
   // };
 
-  if (validUrl.isUri(url)){
+  if (validUrl.isWebUri(url)){
     console.log('Looks like an URI');
     res.json({
       original_url: url,
