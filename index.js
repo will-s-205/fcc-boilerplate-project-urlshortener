@@ -46,20 +46,36 @@ const Url_data = mongoose.model('Url_data', shortenerSchema);
 app.post('/api/shorturl/', (req, res) => {
   const url = req.body.url;
 
-  // Count records in collection +unary operator to make this var as a Number
-  const count = +Url_data.estimatedDocumentCount("url_datas");
-
   // Create a Record of a Model
   const url_item = new Url_data(
     {
       original_url: url,
-      // First short_url is 0 and then increments by 1
-      short_url: count ? count + 1 : 1
+      // First short_url in DB
+      short_url: 1
     });
+
+    const countDocs = () => {
+      Url_data.countDocuments().then((data) => {
+        console.log(data);
+        console.log(typeof data);
+        return url_item.short_url=data+1;
+      })
+    };
+    countDocs();
+
+    const count = url_item.short_url;
+    console.log("count = "+count);
 
   const saveUrlData = () => {
     url_item.save().then(() => {
       console.log("Saving URL to DB: " + url);
+      Url_data.findOne({ original_url: url }).then((data) => {
+        console.log("URL number is: " + url_item.short_url);
+        res.json({
+          original_url: url,
+          short_url: data.short_url
+        });
+      })
     })
   }
 
@@ -75,13 +91,15 @@ app.post('/api/shorturl/', (req, res) => {
   // if NOT then save the data
   const findUrl = () => {
     Url_data.find({ original_url: url }).then((data) => {
-
       if (data != 0) {
         console.log("URL already exist: " + url);
-        Url_data.find({ original_url: url }).then(() => {
+        Url_data.findOne({ original_url: url }).then((data) => {
           console.log("URL number is: " + url_item.short_url);
+          res.json({
+            original_url: url,
+            short_url: data.short_url
+          });
         })
-
       } else {
         console.log("No records found so far");
         saveUrlData();
@@ -93,10 +111,6 @@ app.post('/api/shorturl/', (req, res) => {
   if (validUrl.isWebUri(url)) {
     console.log('Looks like an URI');
     findUrl();
-    res.json({
-      original_url: url,
-      short_url: 1 // REPLACE IT BY DYNAMIC VARIABLE
-    });
   } else {
     console.log('Not a URI');
     res.json({
