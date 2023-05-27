@@ -50,7 +50,7 @@ const createAndSaveDocument = async (urlString) => {
   }
 }
 
-// if NOT an URL then catch JSON error: 'invalid url' in response
+// if NOT an URL then catch error: 'invalid url' in JSON response
 // save URL if not exist in DB and show JSON in response
 // else just show JSON in response
 app.post("/api/shorturl", async (req, res) => {
