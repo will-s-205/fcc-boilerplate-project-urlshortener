@@ -57,11 +57,11 @@ app.post("/api/shorturl", async (req, res) => {
   try {
     const url = new URL(req.body.url);
     if (!['http:', 'https:'].includes(url.protocol)) throw Error;
-    const url_data = await Url_data.findOne({ "original_url": url });
-    if (url_data === null) {
-      req.link = await createAndSaveDocument(req.body.url);
-    } else {
+    const url_data = await Url_data.findOne({ original_url: url });
+    if (url_data != null) {
       req.link = url_data;
+    } else {
+      req.link = await createAndSaveDocument(url);
     }
     const { original_url, short_url } = req.link;
     res.json({ original_url, short_url });
