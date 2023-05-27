@@ -83,7 +83,7 @@ app.get("/api/shorturl/:short_url", async (req, res) => {
     }
   }
   catch (error) {
-    res.json({ error: 'invalid short url' })
+    res.json({ error: 'invalid short url, POST URL first' })
   }
 })
 
