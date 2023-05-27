@@ -2,7 +2,7 @@ body {
   font-family: Arial, sans-serif;
   font-size: 16px;
   color: #222;
-  background-color: #fff;
+  background: radial-gradient(circle, rgba(213,213,213,1) 37%, rgba(187,187,187,1) 71%);
   text-align: center;
   line-height: 1.4em;
 }
@@ -27,8 +27,9 @@ a {
 }
 
 form {
-  margin: 10px auto;
-  padding: 20px;
+  margin: -20px auto;
+  /* padding: -40px; */
+  padding-bottom: 40px;
   max-width: 600px;
 }
 
@@ -43,4 +44,35 @@ input {
 input[type='text'] {
   width: 220px;
   text-align: center;
+}
+
+.footer {
+  margin-top: 40px;
+}
+
+code {
+  font-family: monospace;
+  padding: 2px;
+  color: #000;
+}
+
+ul {
+	list-style-type: none;
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+hr {
+	margin: 25px auto;
+	height: 2px;
+	width: 100px;
+}
+
+.container {
+	padding: 0px;
+	border: 3mm double rgba(53, 53, 53, 0.1);
+	border-radius: 30px;
+	margin: auto 20%;
 }
