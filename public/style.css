@@ -1,6 +1,6 @@
 body {
   margin-top: 100px;
-  font-family: Arial, sans-serif;
+	font-family: 'Roboto', sans-serif;
   font-size: 16px;
   color: #222;
   background: radial-gradient(circle, rgba(213,213,213,1) 37%, rgba(187,187,187,1) 71%);
@@ -16,8 +16,6 @@ h3 {
   margin-top: 30px;
 }
 
-
-
 .user-stories li {
   margin-bottom: 1em;
 }
@@ -28,7 +26,6 @@ a {
 
 form {
   margin: -20px auto;
-  /* padding: -40px; */
   padding-bottom: 40px;
   max-width: 600px;
 }
